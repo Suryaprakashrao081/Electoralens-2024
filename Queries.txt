@@ -1,0 +1,18 @@
+ 1)What is the total number of seats available for elections in each state?
+
+ 2)Total Seats Won by NDA Allianz?
+
+ 3)Seats Won by NDA Allianz Parties?
+
+ 4)Total Seats Won by I.N.D.I.A. Allianz?
+
+ 5)Seats Won by I.N.D.I.A. Allianz Parties?
+
+ 6)Add new column field in table partywise_results to get the Party Allianz as NDA, I.N.D.I.A
+
+ 7)Which party alliance (NDA, I.N.D.I.A, or OTHER) won the most seats across all states?
+
+ 8)Winning candidates name, their party name, total votes, and the margin of victory for a  specific state and            constituency?
+
+ 9)What is the distribution of EVM votes versus postal votes for candidates in a specific constituency?
+

@@ -1,0 +1,141 @@
+  1)What is the total number of seats available for elections in each state?
+
+sol)select
+       state, 
+    count(Constituency) total_seats
+    from 
+       statewise_results
+    group by
+       state
+    order by 
+       total_seats;
+
+
+
+  2)Total Seats Won by NDA Allianz?
+sol)select 
+       sum(cast(won as int)) as NDA
+    from
+       partywise_results
+    where
+       [Party ID] in (369, 860, 1745, 805, 3529, 3165, 1458, 804, 1142, 83, 11998, 160, 2070, 664, 1658)
+    ;
+
+
+
+  
+  3)Seats Won by NDA Allianz Parties?
+sol)select 
+       party,
+       sum(cast(won as int)) as NDA
+    from 
+       partywise_results
+    where 
+       [Party ID] in (369, 860, 1745, 805, 3529, 3165, 1458, 804, 1142, 83, 11998, 160, 2070, 664, 1658)
+    group by
+       party
+    order by 
+       NDA;
+
+
+
+
+  4)Total Seats Won by I.N.D.I.A. Allianz?
+sol)select 
+       sum(cast(won as int)) as INDIA
+    from 
+       partywise_results
+    where 
+       [Party ID] in (742,1680,547,1,1420,582,3369,3620,544,852,545,1534,772,834,1847,140,83,3482,911,1046,2484)
+    ;
+
+
+
+  5)Seats Won by I.N.D.I.A. Allianz Parties?
+sol)select 
+       party,
+       sum(cast(won as int)) as INDIA
+    from 
+       partywise_results
+    where 
+       [Party ID] in (742,1680,547,1,1420,582,3369,3620,544,852,545,1534,772,834,1847,140,83,3482,911,1046,2484)
+    group by 
+       party
+    order by 
+       INDIA;
+
+
+  6)Add new column field in table partywise_results to get the Party Allianz as NDA, I.N.D.I.A
+    and OTHER
+    I.N.D.I.A Allianz
+    NDA Allianz
+    OTHER ?
+sol)alter table partywise_results 
+    add party_allianz varchar(20);
+
+    update [partywise_results ]
+    set party_allianz= case
+    when 
+       [Party ID] in (369, 860, 1745, 805, 3529, 3165, 1458, 804, 1142, 83, 11998, 160, 2070, 664, 1658) then     'NDA'
+    when 
+       [Party ID] in (742,1680,547,1,1420,582,3369,3620,544,852,545,1534,772,834,1847,140,83,3482,911,1046,2484) then 'INDIA'
+	else 'others'
+    end;
+
+   select * 
+   from 
+   partywise_results;
+
+
+
+  7)Which party alliance (NDA, I.N.D.I.A, or OTHER) won the most seats across all states?
+sol)select 
+       party_allianz, 
+       sum(cast(won as int)) won_seats
+    from 
+       [partywise_results ]
+    group by 
+       party_allianz
+    order by
+       won_seats;
+
+
+  8)Winning candidates name, their party name, total votes, and the margin of victory for a  specific state and         constituency?
+sol)select
+      c.[winning candidate],
+      d.[party], 
+      c.[total votes],
+      s.[margin], 
+      s.[state],
+      s.[constituency]
+   from 
+      statewise_results s
+   join 
+     constituencywise_results c
+   on
+     s.Margin=c.Margin
+   join 
+     constituencywise_details d
+   on
+     c.[Constituency ID]=d.[Constituency ID]
+   order by 
+     c.[Winning Candidate]
+
+
+ 9)What is the distribution of EVM votes versus postal votes for candidates in a specific constituency?
+sol)select 
+    D.[candidate], 
+	R.[Constituency Name],
+    sum(cast(D.[EVM Votes] as int) ) as evm_votes,
+    sum(cast(D.[Postal Votes] as int)) as postal_votes
+from 
+    constituencywise_details D
+join 
+    constituencywise_results R
+on 
+    D.[Constituency ID]=R.[Constituency ID]
+group by
+    D.[Candidate],
+	R.[Constituency Name]
+order by
+    D.[Candidate];
